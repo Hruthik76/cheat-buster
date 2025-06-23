@@ -8,3 +8,7 @@
 
 ***Partner-not-found***
 ![image](https://github.com/user-attachments/assets/95f6d2be-7c1b-43ab-a239-ac105a382a45)
+
+***updated one***
+checking with name or email
+![image](https://github.com/user-attachments/assets/607c17af-8bf1-4781-adad-034c2b5f0c8e)
