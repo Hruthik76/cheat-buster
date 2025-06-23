@@ -3,6 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const YAML = require('yamljs');
+const swaggerUi = require('swagger-ui-express');
 const userRoutes = require('./routes/user.routes');
 
 
@@ -17,6 +19,11 @@ app.use(express.json());
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("MongoDB connected successfully."))
     .catch(err => console.error("MongoDB connection error:", err));
+
+
+//
+const swaggerDocument = YAML.load('./swagger.yaml');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get('/', (req, res) => {
     res.send('Cheat Buster API is running!');

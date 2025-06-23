@@ -4,7 +4,10 @@ const { z } = require('zod');
 
 // Define a schema for the query parameters we expect
 const searchQuerySchema = z.object({
-    email: z.string().email({ message: "Invalid email address" }),
+  email: z.string().email().optional(),
+  name: z.string().optional()
+}).refine((data) => data.email || data.name, {
+  message: "Provide at least email or name"
 });
 
 exports.searchUser = async (req, res) => {
@@ -16,7 +19,18 @@ exports.searchUser = async (req, res) => {
             return res.status(400).json({ error: validationResult.error.issues[0].message });
         }
 
-        const { email } = validationResult.data;
+        const { email,name } = validationResult.data;
+        const searchCriteria = {
+            $or: []
+        };
+
+        if (email) {
+            searchCriteria.$or.push({ email });
+        }
+
+        if (name) {
+            searchCriteria.$or.push({ firstName: { $regex: new RegExp(name, 'i') } });
+        }
 
         // 2. Search for the user in the database
         const foundUser = await User.findOne({ email: email });
